@@ -1,7 +1,7 @@
 @for (b of books(); track b.isbn) {
+  <!-- [Property Binding] -->
   <app-book-card
     [book]="b"
     (rateUp)="doRateUp($event)"
     (rateDown)="doRateDown($event)" />
 }
-
