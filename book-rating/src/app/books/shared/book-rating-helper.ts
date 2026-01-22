@@ -20,7 +20,7 @@ export class BookRatingHelper {
   rateDown(book: Book): Book {
     return {
       ...book,
-      rating: book.rating >= 1 ? book.rating - 1 : 1
+      rating: book.rating > 1 ? book.rating - 1 : 1
       // rating: Math.max(1, book.rating - 1)
     }
   }
