@@ -2,12 +2,17 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DashboardPage } from './dashboard-page';
 import { BookRatingHelper } from '../shared/book-rating-helper';
+import { Book } from '../shared/book';
+import { Mock } from 'vitest';
 
 describe('DashboardPage', () => {
   let component: DashboardPage;
   let fixture: ComponentFixture<DashboardPage>;
+  let rateUpMock: Mock;
 
   beforeEach(async () => {
+    rateUpMock = vi.fn();
+
     await TestBed.configureTestingModule({
       imports: [DashboardPage],
       providers: [
@@ -16,8 +21,7 @@ describe('DashboardPage', () => {
         {
           provide: BookRatingHelper,
           useValue: {
-            rateUp: () => {},
-            rateDown: () => {},
+            rateUp: rateUpMock
           }
         }
       ]
@@ -31,5 +35,22 @@ describe('DashboardPage', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should call service.rateUp for component.doRateUp', () => {
+    // Arrange
+    // Testbuch
+    const testBook = { isbn: '234' } as Book; // Type Assertion – vorsichtig verwenden!
+
+    // Mock vorbereiten
+    rateUpMock.mockReturnValue(testBook);
+    debugger;
+
+    // Act
+    component.doRateUp(testBook);
+
+    // Assert
+    // prüfen, ob die Servicemethode rateUp() aufgerufen wurde
+    expect(rateUpMock).toHaveBeenCalledExactlyOnceWith(testBook);
   });
 });
