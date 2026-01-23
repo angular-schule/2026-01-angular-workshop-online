@@ -11,15 +11,16 @@ import { BookStore } from '../shared/book-store';
   styleUrl: './dashboard-page.scss',
 })
 export class DashboardPage {
-  protected readonly books = signal<Book[]>([]);
-
   #ratingHelper = inject(BookRatingHelper);
   #store = inject(BookStore);
 
+  // protected readonly books = signal<Book[]>([]);
+  protected readonly books = this.#store.getAllResource();
+
   constructor() {
-    this.#store.getAll().subscribe(receivedBooks => {
+    /*this.#store.getAll().subscribe(receivedBooks => {
       this.books.set(receivedBooks);
-    });
+    });*/
   }
 
   doRateUp(book: Book): void {

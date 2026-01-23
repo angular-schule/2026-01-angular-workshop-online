@@ -1,11 +1,17 @@
-<p>Anzahl Bücher: {{ books().length }}</p>
+@if (books.isLoading()) {
+  <p>Wird geladen …</p>
+}
 
-@for (b of books(); track b.isbn) {
-  <!-- [Property Binding] -->
-  <app-book-card
-    [book]="b"
-    [minRating]="1"
-    [maxRating]="5"
-    (rateUp)="doRateUp($event)"
-    (rateDown)="doRateDown($event)" />
+@if (books.hasValue()) {
+  <p>Anzahl Bücher: {{ books.value().length }}</p>
+
+  @for (b of books.value(); track b.isbn) {
+    <!-- [Property Binding] -->
+    <app-book-card
+      [book]="b"
+      [minRating]="1"
+      [maxRating]="5"
+      (rateUp)="doRateUp($event)"
+      (rateDown)="doRateDown($event)" />
+  }
 }

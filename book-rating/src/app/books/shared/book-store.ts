@@ -1,5 +1,5 @@
-import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import { HttpClient, httpResource } from '@angular/common/http';
+import { inject, Injectable, resource } from '@angular/core';
 import { Book } from './book';
 import { Observable } from 'rxjs';
 
@@ -12,6 +12,14 @@ export class BookStore {
 
   getAll(): Observable<Book[]> {
     return this.#http.get<Book[]>(this.#apiUrl + '/books');
+  }
+
+  getAllResource() {
+    return httpResource<Book[]>(
+      // Reactive Context
+      () => this.#apiUrl + '/books',
+      { defaultValue: [] }
+    );
   }
 
   getSingle(isbn: string): Observable<Book> {
