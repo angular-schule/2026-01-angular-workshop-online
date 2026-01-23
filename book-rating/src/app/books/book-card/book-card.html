@@ -4,20 +4,21 @@
       src="https://api.angular.schule/avatar/{{ book().rating }}">
     <header class="card-title">
       <h2>{{ book().title }}</h2>
-      <app-rating-display [value]="book().rating" />
+      @let ratingId = book().isbn + 'rating';
+      <app-rating-display [value]="book().rating" [id]="ratingId" />
     </header>
     <p>{{ book().description }}</p>
     <p>Preis: {{ book().price }}</p>
 
     <button type="button"
       class="btn btn-green"
-      aria-label="Rating erhöhen"
+      aria-label="Rating erhöhen" [aria-controls]="ratingId"
       title="Rating erhöhen" (click)="doRateUp()"
       [disabled]="book().rating >= maxRating()"> + </button>
 
     <button type="button"
       class="btn btn-red"
-      aria-label="Rating verringern"
+      aria-label="Rating verringern" aria-controls=""
       title="Rating verringern" (click)="doRateDown()"
       [disabled]="book().rating <= minRating()"> – </button>
   </div>
