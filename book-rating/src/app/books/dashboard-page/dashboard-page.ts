@@ -2,6 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { Book } from '../shared/book';
 import { BookCard } from "../book-card/book-card";
 import { BookRatingHelper } from '../shared/book-rating-helper';
+import { BookStore } from '../shared/book-store';
 
 @Component({
   selector: 'app-dashboard-page',
@@ -13,26 +14,12 @@ export class DashboardPage {
   protected readonly books = signal<Book[]>([]);
 
   #ratingHelper = inject(BookRatingHelper);
+  #store = inject(BookStore);
 
   constructor() {
-    this.books.set([
-      {
-        isbn: '123',
-        title: 'Angular',
-        description: 'Grundlagen und mehr',
-        authors: ['FM', 'DK', 'JH'],
-        price: 42.9,
-        rating: 5
-      },
-      {
-        isbn: '456',
-        title: 'Vue.js',
-        description: 'Das grüne Framework',
-        authors: ['FD'],
-        price: 36.9,
-        rating: 3
-      }
-    ]);
+    this.#store.getAll().subscribe(receivedBooks => {
+      this.books.set(receivedBooks);
+    });
   }
 
   doRateUp(book: Book): void {
