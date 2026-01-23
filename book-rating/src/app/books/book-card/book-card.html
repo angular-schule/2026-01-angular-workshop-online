@@ -21,5 +21,8 @@
       aria-label="Rating verringern" aria-controls=""
       title="Rating verringern" (click)="doRateDown()"
       [disabled]="book().rating <= minRating()"> – </button>
+
+    <a [routerLink]="'/books/' + book().isbn">Details</a>
+    <!-- <a routerLink="/books/{{ book().isbn }}">Details</a>-->
   </div>
 </article>
