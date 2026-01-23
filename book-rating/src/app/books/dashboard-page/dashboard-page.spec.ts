@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DashboardPage } from './dashboard-page';
+import { BookRatingHelper } from '../shared/book-rating-helper';
 
 describe('DashboardPage', () => {
   let component: DashboardPage;
@@ -8,7 +9,18 @@ describe('DashboardPage', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DashboardPage]
+      imports: [DashboardPage],
+      providers: [
+        // BRH ersetzen: Immer wenn BRH angefordert wird,
+        // wird stattdessn unser eigenes Objekt ausgeliefert
+        {
+          provide: BookRatingHelper,
+          useValue: {
+            rateUp: () => {},
+            rateDown: () => {},
+          }
+        }
+      ]
     })
     .compileComponents();
 
