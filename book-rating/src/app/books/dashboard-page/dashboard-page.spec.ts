@@ -44,7 +44,6 @@ describe('DashboardPage', () => {
 
     // Mock vorbereiten
     rateUpMock.mockReturnValue(testBook);
-    debugger;
 
     // Act
     component.doRateUp(testBook);
