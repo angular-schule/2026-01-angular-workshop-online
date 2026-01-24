@@ -18,7 +18,7 @@
 
     <button type="button"
       class="btn btn-red"
-      aria-label="Rating verringern" aria-controls=""
+      aria-label="Rating verringern" [aria-controls]="ratingId"
       title="Rating verringern" (click)="doRateDown()"
       [disabled]="book().rating <= minRating()"> – </button>
 
