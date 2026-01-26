@@ -8,7 +8,7 @@
       <app-rating-display [value]="book().rating" [id]="ratingId" />
     </header>
     <p>{{ book().description }}</p>
-    <p>Preis: {{ book().price }}</p>
+    <p>Preis: {{ book().price | currency:'EUR' }}</p>
 
     <button type="button"
       class="btn btn-green"
