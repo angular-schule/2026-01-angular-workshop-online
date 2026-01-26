@@ -7,6 +7,7 @@ import { Mock } from 'vitest';
 import { BookStore } from '../shared/book-store';
 import { of } from 'rxjs';
 import { resource } from '@angular/core';
+import { provideRouter } from '@angular/router';
 
 describe('DashboardPage', () => {
   let component: DashboardPage;
@@ -19,6 +20,8 @@ describe('DashboardPage', () => {
     await TestBed.configureTestingModule({
       imports: [DashboardPage],
       providers: [
+        // Router für den Test bereitstellen
+        provideRouter([]),
         // BRH ersetzen: Immer wenn BRH angefordert wird,
         // wird stattdessn unser eigenes Objekt ausgeliefert
         {
