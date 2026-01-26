@@ -24,7 +24,23 @@
 
     <button type="button" class="btn btn-yellow" (click)="doDelete()">Löschen</button>
 
+    <a [routerLink]="['/books', book().isbn]">Details</a>
+    <!--
+    1. eckige Klammern ja/nein
+    2. wenn eckige Klammern: rechts String oder Array<string>
+    3. relative oder absolut
+    -->
+    <!--<a routerLink="/books">Dashboard</a>
+
     <a [routerLink]="'/books/' + book().isbn">Details</a>
-    <!-- <a routerLink="/books/{{ book().isbn }}">Details</a>-->
+    <a [routerLink]="`/books/${book().isbn}`">Details</a>
+
+    <a [routerLink]="book().isbn">Details</a>
+    <a [routerLink]="[book().isbn]">Details</a>
+    <a [routerLink]="['.', book().isbn]">Details</a>
+    <a routerLink="{{ book().isbn }}">Details</a>
+    <a routerLink="123">Details</a>
+
+    <a routerLink="/books/{{ book().isbn }}">Details</a>-->
   </div>
 </article>
