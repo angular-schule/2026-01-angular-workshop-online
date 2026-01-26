@@ -1,7 +1,24 @@
 <form>
   <div class="form-group">
+    @let isbnInvalid = bookForm.isbn().invalid() && bookForm.isbn().touched();
     <label for="isbnInput">ISBN</label>
-    <input type="text" id="isbnInput" class="form-control" [formField]="bookForm.isbn">
+    <input type="text" id="isbnInput" class="form-control"
+      [formField]="bookForm.isbn"
+      [aria-invalid]="isbnInvalid"
+      [aria-errormessage]="isbnInvalid ? 'isbnError' : null">
+
+      @if (isbnInvalid) {
+      <div class="feedback-error" role="alert" id="isbnError">
+        Folgende Fehler sind aufgetreten:
+        <ul>
+          @for (e of bookForm.isbn().errors(); track e.kind) {
+            <li>{{ e.message }}</li>
+          }
+        </ul>
+      </div>
+    }
+
+    <!--Ausblick: <app-form-errors [field]="bookForm.isbn" />-->
   </div>
 
   <div class="form-group">
