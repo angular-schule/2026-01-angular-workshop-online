@@ -22,6 +22,8 @@
       title="Rating verringern" (click)="doRateDown()"
       [disabled]="book().rating <= minRating()"> – </button>
 
+    <button type="button" class="btn btn-yellow" (click)="doDelete()">Löschen</button>
+
     <a [routerLink]="'/books/' + book().isbn">Details</a>
     <!-- <a routerLink="/books/{{ book().isbn }}">Details</a>-->
   </div>
