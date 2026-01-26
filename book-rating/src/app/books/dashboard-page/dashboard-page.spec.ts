@@ -4,14 +4,17 @@ import { DashboardPage } from './dashboard-page';
 import { BookRatingHelper } from '../shared/book-rating-helper';
 import { Book } from '../shared/book';
 import { Mock } from 'vitest';
+import { BookStore } from '../shared/book-store';
+import { of } from 'rxjs';
+import { resource } from '@angular/core';
 
 describe('DashboardPage', () => {
   let component: DashboardPage;
   let fixture: ComponentFixture<DashboardPage>;
-  let rateUpMock: Mock;
+  let rateUpFn: Mock;
 
   beforeEach(async () => {
-    rateUpMock = vi.fn();
+    rateUpFn = vi.fn();
 
     await TestBed.configureTestingModule({
       imports: [DashboardPage],
@@ -21,8 +24,20 @@ describe('DashboardPage', () => {
         {
           provide: BookRatingHelper,
           useValue: {
-            rateUp: rateUpMock
+            rateUp: rateUpFn
           }
+        },
+        {
+          provide: BookStore,
+          // useFactory notwendig, weil Resource einen Injection Context braucht
+          useFactory: () => ({
+            // Ersatz für Observable-Methode
+            getAll: () => of([]),
+            // Erdatz für Resource-Methode
+            getAllResource: () => resource({
+              loader: () => Promise.resolve([])
+            })
+          })
         }
       ]
     })
@@ -43,13 +58,13 @@ describe('DashboardPage', () => {
     const testBook = { isbn: '234' } as Book; // Type Assertion – vorsichtig verwenden!
 
     // Mock vorbereiten
-    rateUpMock.mockReturnValue(testBook);
+    rateUpFn.mockReturnValue(testBook);
 
     // Act
     component.doRateUp(testBook);
 
     // Assert
     // prüfen, ob die Servicemethode rateUp() aufgerufen wurde
-    expect(rateUpMock).toHaveBeenCalledExactlyOnceWith(testBook);
+    expect(rateUpFn).toHaveBeenCalledExactlyOnceWith(testBook);
   });
 });
