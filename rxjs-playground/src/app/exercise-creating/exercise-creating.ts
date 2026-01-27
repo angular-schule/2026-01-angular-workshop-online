@@ -23,6 +23,27 @@ export class ExerciseCreating {
      */
 
     /******************************/
+
+    // of('Berlin', 'München', 'Bern', 'Thun', 'Zürich')
+    // from([1,2,3,4,5,6])
+    // interval(1000)        // ---0---1---2---3---4---5 ...
+    // timer(3000)           // -----------0|
+    // timer(3000, 1000)     // -----------0---1---2---3---4---5 ...
+    // timer(1000, 1000)     // ---0---1---2---3---4---5 ...
+    // timer(0, 1000)        // 0---1---2---3---4---5 ...
+
+    timer(0, 1000).pipe(
+      map(e => e * 3),
+      filter(e => e % 2 === 0)
+    ).subscribe({
+      next: e => this.log(e),
+      complete: () => this.log('COMPLETE')
+    });
+
+
+
+
+    /******************************/
     // Producer: führt Aktionen aus und generiert Werte,
     // die über Callbacks an den Observer vermittelt werden
     function producer(sub: Subscriber<number>) {
