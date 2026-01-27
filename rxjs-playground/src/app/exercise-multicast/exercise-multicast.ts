@@ -1,6 +1,6 @@
 import { Component, OnDestroy, inject, signal } from '@angular/core';
 import { AsyncPipe, DecimalPipe } from '@angular/common';
-import { Subject, BehaviorSubject, ReplaySubject, Observable, share, takeUntil } from 'rxjs';
+import { Subject, BehaviorSubject, ReplaySubject, Observable, share, takeUntil, shareReplay } from 'rxjs';
 
 import { MeasureValuesService } from './measure-values.service';
 import { HistoryWindow } from '../shared/history-window/history-window';
@@ -18,11 +18,19 @@ export class ExerciseMulticast implements OnDestroy {
   #destroy$ = new Subject<void>();
   #listenerId = 1;
 
-  measureValues$: Observable<number>; // später: Subject<number>;
+  measureValues$: Observable<number>;
 
   constructor() {
     /**************!!**************/
-    this.measureValues$ = this.#mvs.getValues();
+    // this.measureValues$ = this.#mvs.getValues().pipe(share());
+    this.measureValues$ = this.#mvs.getValues().pipe(shareReplay(1));
+
+    // this.measureValues$ = new Subject();
+    // this.measureValues$ = new BehaviorSubject(0); // 0: Startwert
+    // this.measureValues$ = new ReplaySubject(5); // 5: Puffergröße
+    // this.#mvs.getValues().subscribe(this.measureValues$);
+
+
     /**************!!**************/
 
   }
