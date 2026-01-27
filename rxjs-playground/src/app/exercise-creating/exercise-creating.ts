@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Observable, of, from, timer, interval, ReplaySubject, map, filter } from 'rxjs';
+import { Observable, of, from, timer, interval, ReplaySubject, map, filter, Subscriber, Observer } from 'rxjs';
 
 import { HistoryWindow } from '../shared/history-window/history-window';
 
@@ -23,8 +23,38 @@ export class ExerciseCreating {
      */
 
     /******************************/
+    // Producer: führt Aktionen aus und generiert Werte,
+    // die über Callbacks an den Observer vermittelt werden
+    function producer(sub: Subscriber<number>) {
+      const result = Math.random();
+      sub.next(result);
+      sub.next(10);
 
-    
+      setTimeout(() => sub.next(1000), 2000)
+      setTimeout(() => sub.next(2000), 4000)
+      setTimeout(() => sub.complete(), 6000)
+    }
+
+    // Observer: empfängt und verarbeitet die Daten
+    const obs: Observer<number> = {
+      next: e => console.log(e),
+      error: (err: any) => console.error(err),
+      complete: () => console.log('FERTIG'),
+    }
+
+
+    // producer(obs);
+    // Observable: Schnittstelle zwischen Producer und Observer
+    const myObs$ = new Observable(producer);
+    // myObs$.subscribe(obs);
+
+    // Finnische Notation $
+    const myObs2$ = new Observable<string>(sub => {
+      sub.next('Hallo');
+      sub.complete();
+    })
+
+
     /******************************/
   }
 
