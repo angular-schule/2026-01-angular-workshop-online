@@ -1,7 +1,9 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { Book } from '../shared/book';
 import { form, FormField, max, maxLength, min, minLength, pattern, provideSignalFormsConfig, required, validate } from '@angular/forms/signals';
 import { JsonPipe } from '@angular/common';
+import { BookStore } from '../shared/book-store';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-book-create-page',
@@ -18,6 +20,9 @@ import { JsonPipe } from '@angular/common';
   ]
 })
 export class BookCreatePage {
+  #store = inject(BookStore);
+  #router = inject(Router);
+
   // Datenmodell
   #bookFormData = signal<Book>({
     isbn: '',
@@ -51,5 +56,28 @@ export class BookCreatePage {
     min(path.rating, 1, { message: 'Rating must in range of 1...5' });
     max(path.rating, 5, { message: 'Rating must in range of 1...5' });
   });
+
+  submitForm() {
+    // prüfen, ob das Formular überhaupt gültig ist
+    if (this.bookForm().invalid()) {
+      // TODO: alle Felder als touched markieren
+      return false;
+    }
+
+    // Buch erzeugen aus den Formulardaten
+    // const newBook = this.#bookFormData();
+    const newBook = this.bookForm().value();
+
+    // BookStore.create() HTTP
+    this.#store.create(newBook).subscribe(createdBook => {
+      this.#router.navigate(['/books', createdBook.isbn]);
+    });
+
+
+    // wegnavigieren zur Detailseite
+    // alternativ: Formular zurücksetzen
+
+    return false; // prevent reload
+  }
 
 }

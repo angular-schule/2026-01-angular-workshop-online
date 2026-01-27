@@ -1,4 +1,4 @@
-<form novalidate>
+<form novalidate (submit)="submitForm()">
   <div class="form-group">
     @let isbnInvalid = bookForm.isbn().invalid() && bookForm.isbn().touched();
     <label for="isbnInput">ISBN</label>
@@ -15,7 +15,11 @@
           }
         </ul>
       </div>
+
     }
+    <p>touched: {{ bookForm.isbn().touched() }}</p>
+    <p>dirty: {{ bookForm.isbn().dirty() }}</p>
+    <p>invalid: {{ bookForm.isbn().invalid() }}</p>
 
     <!--Ausblick: <app-form-errors [field]="bookForm.isbn" />-->
   </div>
