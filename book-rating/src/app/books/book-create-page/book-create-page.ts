@@ -1,6 +1,6 @@
 import { Component, signal } from '@angular/core';
 import { Book } from '../shared/book';
-import { form, FormField, max, maxLength, min, minLength, pattern, required, validate } from '@angular/forms/signals';
+import { form, FormField, max, maxLength, min, minLength, pattern, provideSignalFormsConfig, required, validate } from '@angular/forms/signals';
 import { JsonPipe } from '@angular/common';
 
 @Component({
@@ -8,8 +8,17 @@ import { JsonPipe } from '@angular/common';
   imports: [FormField, JsonPipe],
   templateUrl: './book-create-page.html',
   styleUrl: './book-create-page.scss',
+  providers: [
+    provideSignalFormsConfig({
+      classes: {
+        // CSS-Klasse "invalid" wird auf DOM-Element angewendet, wenn Bedingung erfüllt ist
+        invalid: (field) => field.state().touched() && field.state().invalid()
+      }
+    })
+  ]
 })
 export class BookCreatePage {
+  // Datenmodell
   #bookFormData = signal<Book>({
     isbn: '',
     title: '',
@@ -19,7 +28,9 @@ export class BookCreatePage {
     authors: []
   });
 
+  // Formularmodell
   protected readonly bookForm = form(this.#bookFormData, path => {
+    // Schema
     required(path.isbn, { message: 'ISBN is required.' });
     minLength(path.isbn, 10, { message: 'ISBN must be min. 10 chars.' });
     maxLength(path.isbn, 13, { message: 'ISBN must be max. 13 chars.' });
