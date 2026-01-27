@@ -17,10 +17,15 @@ export class ExerciseFromevent {
      * Entprelle den Eventstrom, damit nicht zu viele Events gefeuert werden.
      */
 
+
     /******************************/
 
-    fromEvent<{ target: Window }>(window, 'resize').subscribe(e => {
-      console.log(e);
+    fromEvent<{ target: Window }>(window, 'resize').pipe(
+      debounceTime(150),
+      map(e => e.target.innerWidth),
+      startWith(window.innerWidth),
+    ).subscribe(e => {
+      this.currentWidth.set(e);
     });
 
     /******************************/
