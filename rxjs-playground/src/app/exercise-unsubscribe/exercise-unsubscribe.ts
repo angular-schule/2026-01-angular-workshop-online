@@ -1,5 +1,5 @@
-import { Component, OnDestroy } from '@angular/core';
-import { Subject, ReplaySubject, timer, Subscription, takeWhile, takeUntil } from 'rxjs';
+import { Component, DestroyRef, inject, OnDestroy } from '@angular/core';
+import { Subject, ReplaySubject, timer, Subscription, takeWhile, takeUntil, take } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { HistoryWindow } from '../shared/history-window/history-window';
@@ -16,22 +16,28 @@ export class ExerciseUnsubscribe implements OnDestroy {
    * Öffne die Browser-Console: Dort siehst Du den Output eines Observables, das jede Sekunde einen Wert generiert.
    * Navigiere zurück auf die Startseite und beobachte die Console:
    * Die Subscription läuft weiter. Wir haben einen klassischen Memory Leak erzeugt ...
-   * 
+   *
    * Sorge dafür, dass die Subscription in der Methode ngOnDestroy() beendet wird!
    * Sie wird beim Buttonklick und beim Wegnavigieren ausgelöst.
-   * 
+   *
    * Es gibt noch weitere Wege, das Problem zu lösen ...
    */
+
+  // #sub: Subscription;
+
+  // #destroy$ = new Subject<void>();
+  #destroyRef = inject(DestroyRef);
+
   constructor() {
+    // Subject einmalig auslösen beim Beenden der Komponente
+    // this.#destroyRef.onDestroy(() => this.#destroy$.next());
+
     const interval$ = timer(0, 1000);
 
+
     interval$.pipe(
-
-      /******************************/
-
-      
-      /******************************/
-
+      // takeUntil(this.#destroy$)
+      takeUntilDestroyed()
     ).subscribe({
       next: e => this.log(e),
       error: err => this.log('❌ ERROR: ' + err),
@@ -39,7 +45,15 @@ export class ExerciseUnsubscribe implements OnDestroy {
     });
   }
 
+  foobar() {
+    timer(0, 1000).pipe(
+      takeUntilDestroyed(this.#destroyRef)
+    ).subscribe()
+  }
+
+  // Lifecycle Hook
   ngOnDestroy() {
+    // this.#sub.unsubscribe();
   }
 
   log(msg: unknown) {
