@@ -19,7 +19,7 @@ export class BookDetailsPage {
     // const isbn = this.#route.snapshot.paramMap.get('isbn'); // path: 'books/:isbn'
 
     // PUSH
-    // TODO: Verschachtelte Subscriptions vermeiden
+    // TODO: Verschachtelte Subscriptions vermeiden, vor allem wegen Race Condition
     this.#route.paramMap.subscribe(params => {
       // Im Zweifel bitte if-Abfrage oder Fallback verwenden
       const isbn = params.get('isbn')!; // Non-Null Assertion, bitte vorsichtig verwenden!
