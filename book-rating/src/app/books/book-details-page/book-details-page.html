@@ -1,4 +1,5 @@
-@if (book(); as b) {
+@if (book.hasValue()) {
+  @let b = book.value();
   <h2>{{ b.title }}</h2>
   <p>{{ b.description }}</p>
 }
