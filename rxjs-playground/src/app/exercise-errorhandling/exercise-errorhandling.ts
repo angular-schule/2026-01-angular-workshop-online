@@ -29,10 +29,11 @@ export class ExerciseErrorhandling {
         // return EMPTY;
 
         // Fehler weiterwerfen (error)
-        throw 'BÖSER FEHLER!';
+        // throw err;
+        // throw 'BÖSER FEHLER!';
 
         // Fehler ersetzen (next)
-        // return of('Nichts passiert!');
+        return of('Nichts passiert!');
 
       })
     ).subscribe({

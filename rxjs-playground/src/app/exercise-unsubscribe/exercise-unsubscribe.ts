@@ -34,7 +34,6 @@ export class ExerciseUnsubscribe implements OnDestroy {
 
     const interval$ = timer(0, 1000);
 
-
     interval$.pipe(
       // takeUntil(this.#destroy$)
       takeUntilDestroyed()
