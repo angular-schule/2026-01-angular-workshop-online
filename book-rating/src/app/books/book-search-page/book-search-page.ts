@@ -1,7 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { form, FormField } from '@angular/forms/signals';
-import { debounceTime, distinctUntilChanged, filter, switchMap } from 'rxjs';
+import { debounceTime, distinctUntilChanged, EMPTY, filter, of, Subject, switchMap } from 'rxjs';
 import { BookStore } from '../shared/book-store';
 
 @Component({
@@ -18,8 +18,18 @@ export class BookSearchPage {
 
   protected readonly results = toSignal(toObservable(this.searchTerm).pipe(
     debounceTime(300),
-    filter(term => term.length >= 3),
     distinctUntilChanged(),
-    switchMap(term => this.#bookStore.search(term))
+    switchMap(term => {
+      if (term.length >= 3) {
+        return this.#bookStore.search(term);
+      } else {
+        return of([]);
+      }
+    })
   ), { initialValue: [] })
 }
+
+/*
+leerer Suchbegriff: leere Liste
+ab 3 Zeichen: echte Suche
+*/
