@@ -2,6 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { BookStore } from '../shared/book-store';
 import { Book } from '../shared/book';
+import { filter, map, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-book-details-page',
@@ -15,17 +16,12 @@ export class BookDetailsPage {
   protected readonly book = signal<Book | undefined>(undefined);
 
   constructor() {
-    // PULL
-    // const isbn = this.#route.snapshot.paramMap.get('isbn'); // path: 'books/:isbn'
-
-    // PUSH
-    // TODO: Verschachtelte Subscriptions vermeiden, vor allem wegen Race Condition
-    this.#route.paramMap.subscribe(params => {
-      // Im Zweifel bitte if-Abfrage oder Fallback verwenden
-      const isbn = params.get('isbn')!; // Non-Null Assertion, bitte vorsichtig verwenden!
-      this.#store.getSingle(isbn).subscribe(book => {
-        this.book.set(book);
-      });
+    this.#route.paramMap.pipe(
+      map(params => params.get('isbn')),
+      filter(isbn => isbn !== null),
+      switchMap(isbn => this.#store.getSingle(isbn))
+    ).subscribe(book => {
+      this.book.set(book);
     });
   }
 
